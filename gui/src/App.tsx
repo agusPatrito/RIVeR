@@ -35,7 +35,7 @@ export const App: React.FC = () => {
         return <Ipcam />;
 
       default:
-        return <HomePage/>;
+        return <HomePage />;
     }
   };
 
@@ -83,3 +83,5 @@ export const App: React.FC = () => {
     </div>
   );
 };
+
+// prueba
