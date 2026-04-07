@@ -189,29 +189,28 @@ jobs:
 
       - name: 4. Install Python Portable (Apple Silicon)
         run: |
-          # 1. Crear el directorio de destino
           mkdir -p "$GITHUB_WORKSPACE/gui/river-cli"
           export UV_PYTHON_INSTALL_DIR="$GITHUB_WORKSPACE/gui/river-cli"
           
-          echo "Instalando Python 3.12.1..."
-          # Quitamos el flag --targets que causó el error
+          echo "Instalando Python..."
           uv python install 3.12.1
           
-          # 2. Entrar y ver qué nombre le puso la carpeta
           cd "$GITHUB_WORKSPACE/gui/river-cli"
-          echo "Contenido detectado en river-cli:"
-          ls -F
           
-          # 3. Renombrado robusto
-          # Buscamos la carpeta que empiece con cpython y la mandamos a 'python'
-          CPYTHON_DIR=$(ls -d cpython-* 2>/dev/null | head -n 1)
-          if [ -n "$CPYTHON_DIR" ]; then
-            mv "$CPYTHON_DIR" python
-            echo "Renombrado exitoso: $CPYTHON_DIR -> python"
-          else
-            echo "Error: No se encontró carpeta de Python"
-            exit 1
-          fi
+          # 1. Encontrar el nombre de la carpeta real/link que creó uv
+          REAL_DIR=$(ls -d cpython-* | head -n 1)
+          echo "Detectado: $REAL_DIR"
+          
+          # 2. TRUCO DE INGENIERÍA: Copiar con dereferencia (-L)
+          # Esto copia el CONTENIDO al que apunta el link, no el link en sí.
+          cp -RL "$REAL_DIR" python_temp
+          
+          # 3. Limpiar y dejar la carpeta final
+          rm -rf "$REAL_DIR"
+          mv python_temp python
+          
+          echo "Verificación de portabilidad:"
+          ls -la python/bin/python3
 
       - name: 5. Install dependencies and RIVeR CLI
         run: |
