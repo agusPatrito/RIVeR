@@ -1,6 +1,9 @@
 name: Build RIVeR
 
 on:
+  push:
+    branches:
+      - 'design/150-minor-fixes'
   workflow_dispatch: # Para correrlo local o manual
 
 jobs:
