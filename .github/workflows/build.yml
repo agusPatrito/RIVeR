@@ -189,14 +189,32 @@ jobs:
 
       - name: 4. Install Python Portable (Apple Silicon)
         run: |
-          mkdir -p gui/river-cli
-          export UV_PYTHON_INSTALL_DIR=$GITHUB_WORKSPACE/gui/river-cli
-          # Forzamos arquitectura aarch64 (Apple Silicon)
-          uv python install 3.12.1 --targets aarch64-apple-darwin 
-
-          cd gui/river-cli
-          # Buscamos la carpeta que diga aarch64
-          mv cpython-3.12.1-apple-darwin-aarch64-install_dir python
+          # 1. Crear directorio con ruta absoluta
+          mkdir -p "$GITHUB_WORKSPACE/gui/river-cli"
+          export UV_PYTHON_INSTALL_DIR="$GITHUB_WORKSPACE/gui/river-cli"
+          
+          echo "Instalando Python con uv..."
+          # Intentamos instalar. Si falla, 'uv' nos dirá por qué.
+          uv python install 3.12.1 --targets aarch64-apple-darwin
+          
+          # 2. Listar TODO lo que hay en la carpeta para no adivinar nombres
+          echo "Contenido de gui/river-cli:"
+          ls -R "$GITHUB_WORKSPACE/gui/river-cli"
+          
+          # 3. Mover usando un patrón que no dependa del nombre largo
+          cd "$GITHUB_WORKSPACE/gui/river-cli"
+          
+          # Buscamos cualquier carpeta que empiece con 'cpython' y la renombramos
+          # Usamos un if para que no explote si la carpeta no existe
+          CPYTHON_DIR=$(ls -d cpython-* 2>/dev/null | head -n 1)
+          
+          if [ -n "$CPYTHON_DIR" ]; then
+            echo "Carpeta encontrada: $CPYTHON_DIR. Renombrando a 'python'..."
+            mv "$CPYTHON_DIR" python
+          else
+            echo "Error: No se encontró ninguna carpeta que empiece con cpython"
+            exit 1
+          fi
 
       - name: 5. Install dependencies and RIVeR CLI
         run: |
