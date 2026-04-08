@@ -193,7 +193,7 @@ jobs:
           export UV_PYTHON_INSTALL_DIR="$GITHUB_WORKSPACE/gui/river-cli"
           
           echo "Instalando Python..."
-          uv python install 3.11
+          uv python install 3.11.9
           
           cd "$GITHUB_WORKSPACE/gui/river-cli"
           
