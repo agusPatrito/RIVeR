@@ -193,7 +193,7 @@ jobs:
           export UV_PYTHON_INSTALL_DIR="$GITHUB_WORKSPACE/gui/river-cli"
           
           echo "Instalando Python..."
-          uv python install 3.12.1
+          uv python install 3.11.0
           
           cd "$GITHUB_WORKSPACE/gui/river-cli"
           
@@ -201,7 +201,6 @@ jobs:
           REAL_DIR=$(ls -d cpython-* | head -n 1)
           echo "Detectado: $REAL_DIR"
           
-          # 2. TRUCO DE INGENIERÍA: Copiar con dereferencia (-L)
           # Esto copia el CONTENIDO al que apunta el link, no el link en sí.
           cp -RL "$REAL_DIR" python_temp
           
@@ -245,7 +244,7 @@ jobs:
           
           yarn build
           # Build específico para arm64 (Apple Silicon)
-          yarn electron-builder --mac dmg --arm64
+          yarn build-mac
 
       - name: 8. Upload artifact (.dmg)
         uses: actions/upload-artifact@v4
