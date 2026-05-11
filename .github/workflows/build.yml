@@ -1,6 +1,9 @@
 name: Build RIVeR
 
 on:
+  push:
+    branches:
+      - develop
   workflow_dispatch: # Para correrlo local o manual
 
 jobs:
