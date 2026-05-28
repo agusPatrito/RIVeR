@@ -24,7 +24,7 @@ jobs:
           node-version: '24'
 
       - name: 3. Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v8
 
       - name: 4. Install Python Portable and rename folder
         run: |
@@ -94,7 +94,7 @@ jobs:
           node-version: '24'
 
       - name: 3. Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v8
 
       - name: 4. Install Python Portable and rename folder
         shell: powershell
@@ -185,7 +185,7 @@ jobs:
           node-version: '24'
 
       - name: 3. Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v8
 
       - name: 4. Install Python Portable (Apple Silicon)
         run: |
