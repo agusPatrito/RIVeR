@@ -11,6 +11,7 @@ jobs:
   #  Linux (.deb)
   # ─────────────────────────────────────────────
   build-linux:
+    if: false
     runs-on: ubuntu-24.04
 
     steps:
@@ -81,6 +82,7 @@ jobs:
   #  Windows (.exe NSIS installer)
   # ─────────────────────────────────────────────
   build-windows:
+    if: false
     runs-on: windows-latest
 
     steps:
@@ -173,6 +175,7 @@ jobs:
   #  macOS (Apple Silicon - arm64)
   # ─────────────────────────────────────────────
   build-mac:
+    if: false
     runs-on: macos-latest
     steps:
       - name: 1. Checkout
