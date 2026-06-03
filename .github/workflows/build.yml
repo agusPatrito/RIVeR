@@ -3,6 +3,8 @@ name: Build RIVeR
 on:
   workflow_dispatch:
   push:
+    branches:
+      - feat/89-mac-intel-build
     tags:
       - 'v*'
 
