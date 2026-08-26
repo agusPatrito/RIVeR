@@ -273,7 +273,16 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: RIVeR-Windows-Setup
-          path: gui/release/**/*.exe
+          # Not gui/release/**/*.exe: electron-builder also leaves a
+          # win-unpacked/ dir next to the installer with an unpacked copy of
+          # everything in extraResources — including river-cli/python/
+          # python.exe. A recursive glob picks that up too, and since
+          # `gh release create` (in the publish job) names each asset after
+          # its basename, uploading two files both called python.exe fails
+          # with "ReleaseAsset.name already exists". Restricting to one
+          # directory level keeps this to the installer in release/<version>/
+          # and skips win-unpacked/ entirely.
+          path: gui/release/*/*.exe
 
   # ─────────────────────────────────────────────
   #  macOS (Apple Silicon - arm64)
