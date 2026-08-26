@@ -42,10 +42,21 @@ jobs:
         run: |
           cd gui/river-cli
 
-          # 1. Install dependencies from requirements.txt
+          # 1. Install CPU-only PyTorch first. pyproject.toml only requires
+          # "torch >= 2.0.0" with no CPU/GPU distinction, so an unconstrained
+          # install pulls PyPI's default CUDA-enabled Linux wheel — several
+          # GB of bundled NVIDIA libraries (cublas, cudnn, cusolver, ...)
+          # that this portable Electron app never uses (STIV only ever runs
+          # CPU inference here). That bloat is what pushed the packaged
+          # .deb past GitHub Releases' 2 GB asset limit. Installing the CPU
+          # wheel from PyTorch's own index first satisfies the ">= 2.0.0"
+          # constraint so the steps below don't re-resolve it against PyPI.
+          ./python/bin/python -m pip install --break-system-packages torch --index-url https://download.pytorch.org/whl/cpu
+
+          # 2. Install dependencies from requirements.txt
           ./python/bin/python -m pip install -r ../../requirements.txt --break-system-packages
 
-          # 2. Install local package (uses pyproject.toml). Must run AFTER the
+          # 3. Install local package (uses pyproject.toml). Must run AFTER the
           # STIV weights download above: setuptools only bundles the data
           # files (see [tool.setuptools.package-data] in pyproject.toml) that
           # exist in river/core/stiv_model/ at install time.
@@ -149,10 +160,16 @@ jobs:
         run: |
           Set-Location gui\river-cli
 
-          # 1. Install dependencies from requirements.txt
+          # 1. Install CPU-only PyTorch first — see the build-linux job's
+          # equivalent step for why: an unconstrained install otherwise pulls
+          # PyPI's default CUDA-enabled Windows wheel (several GB of bundled
+          # NVIDIA libraries this portable app never uses).
+          .\python\python.exe -m pip install --break-system-packages torch --index-url https://download.pytorch.org/whl/cpu
+
+          # 2. Install dependencies from requirements.txt
           .\python\python.exe -m pip install -r ..\..\requirements.txt --break-system-packages
 
-          # 2. Install local package (uses pyproject.toml). Must run AFTER the
+          # 3. Install local package (uses pyproject.toml). Must run AFTER the
           # STIV weights download above: setuptools only bundles the data
           # files (see [tool.setuptools.package-data] in pyproject.toml) that
           # exist in river/core/stiv_model/ at install time.
