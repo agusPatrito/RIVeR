@@ -228,10 +228,20 @@ jobs:
           # 2. Download ffmpeg for Windows
           Write-Host "Downloading ffmpeg for Windows..."
           New-Item -ItemType Directory -Force -Path ffmpeg\bin
+          # Moved off gyan.dev: that single-maintainer host proved unreliable
+          # from CI (503s, stalled connections) — see the build-linux job's
+          # equivalent step for the same story on johnvansickle.com.
+          # BtbN/FFmpeg-Builds publishes the same kind of static GPL build as
+          # a GitHub release asset instead, served from GitHub's own CDN. The
+          # version-numbered filename below (n9.0) will eventually be
+          # replaced by a newer one on BtbN's end and 404 — if this download
+          # starts failing, check
+          # https://github.com/BtbN/FFmpeg-Builds/releases/tag/latest for the
+          # current filename and bump it here.
           # -TimeoutSec bounds the request: Invoke-WebRequest has no default
-          # timeout, so a stalled connection to gyan.dev would otherwise hang
-          # until the job-level timeout-minutes above cuts it off.
-          Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile ffmpeg-win.zip -TimeoutSec 60
+          # timeout, so a stalled connection would otherwise hang until the
+          # job-level timeout-minutes above cuts it off.
+          Invoke-WebRequest -Uri "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n9.0-latest-win64-gpl-9.0.zip" -OutFile ffmpeg-win.zip -TimeoutSec 60
           Expand-Archive -Path ffmpeg-win.zip -DestinationPath ffmpeg-tmp
           $ffDir = Get-ChildItem -Directory ffmpeg-tmp | Select-Object -First 1
           Copy-Item "$($ffDir.FullName)\bin\ffmpeg.exe"  "ffmpeg\bin\ffmpeg.exe"
@@ -239,7 +249,7 @@ jobs:
 
           # These builds are GPL-3.0, so the licence must ship with them.
           # Prefer the distributor's own copy; fall back to the text in the repo.
-          $ffLicense = Join-Path $ffDir.FullName "LICENSE"
+          $ffLicense = Join-Path $ffDir.FullName "LICENSE.txt"
           if (Test-Path $ffLicense) {
             Copy-Item $ffLicense "ffmpeg\LICENSE.txt"
           } else {
