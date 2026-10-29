@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "river-cli"
-version = "3.8.2"
+version = "9.9.9"
 description = "A CLI application for Large Scale Particle Image Velocimetry (LSPIV)."
 readme = "readme.md"
 authors = [
