@@ -439,3 +439,4 @@ the source of a bundled third-party component, or a copy on physical media, writ
 - [WMO HydroHub](https://wmo.int/media/update/winner-of-wmo-hydrohub-innovation-call-latin-america-and-caribbean?book=21576): For funding the development of RIVeR 3 (2024-2025)
 - [PIVlab project](https://la.mathworks.com/matlabcentral/fileexchange/27659-pivlab-particle-image-velocimetry-piv-tool-with-gui): The pioneering PIV analysis tool that inspired aspects of RIVeR's development
 - [IWaVE](https://github.com/DataForWater/IWaVE) by Giulio Dolcetti (University of Trento), Salvador Peña-Haro and Hessel Winsemius, maintained under the [DataForWater](https://github.com/DataForWater) organisation: the image wave velocimetry engine behind RIVeR's iWave technique
+
